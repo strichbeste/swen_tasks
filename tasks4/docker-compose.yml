@@ -1,0 +1,19 @@
+# postgresql in docker mit persistenz-volume
+# starten mit: docker-compose up -d
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: tasks-db
+    environment:
+      POSTGRES_DB: tasksdb       # datenbankname
+      POSTGRES_USER: postgres    # benutzer
+      POSTGRES_PASSWORD: postgres # passwort
+    ports:
+      - "5432:5432"              # host:container port-mapping
+    volumes:
+      - tasks_data:/var/lib/postgresql/data  # persistenz: daten bleiben nach neustart
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql  # schema beim start ausfuehren
+
+volumes:
+  tasks_data: # benanntes volume fuer datenpersistenz
